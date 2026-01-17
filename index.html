@@ -1,161 +1,172 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>New tab</title>
+  <title>Zero Violet Tab</title>
   <style>
     :root { --main: #eeeeee; --alt: #1d81b2; --bg: #1a1a1a; }
-    html, body { height: 100%; margin: 0; background: var(--bg); overflow: hidden; }
-    body { 
-      display: flex; 
-      font: 18px "Courier New", Courier, monospace; 
-      color: var(--main);
-    }
-
-    .sidebar {
-      display: flex;
-      flex-direction: column;
-      padding: 2em;
-      width: 250px;
-      border-right: 1px solid #333;
-      height: 100vh;
-      box-sizing: border-box;
-      flex-shrink: 0;
-    }
-
-    /* Invisible Search Bar */
-    #search-input {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--alt);
-      color: var(--alt);
-      font-family: inherit;
-      font-size: 0.9em;
-      outline: none;
-      width: 100%;
-      margin-bottom: 1.5em;
-      display: none; /* Hidden by default */
-      padding: 5px 0;
-    }
-
-    h1 { font-size: 1.5em; margin: 0 0 1.5em 0; }
+    html, body { height: 100%; margin: 0; background: var(--bg); overflow: hidden; position: relative; }
     
+    body::before {
+      content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.04; pointer-events: none; animation: noise 0.2s infinite;
+    }
+    @keyframes noise {
+      0% { transform: translate(0,0) } 10% { transform: translate(-1%,-1%) }
+      20% { transform: translate(1%,1%) } 30% { transform: translate(-2%,1%) }
+      100% { transform: translate(0,0) }
+    }
+
+    body { display: flex; font: 18px "Courier New", Courier, monospace; color: var(--main); z-index: 1; }
+    .sidebar { display: flex; flex-direction: column; padding: 2em; width: 250px; border-right: 1px solid #333; height: 100vh; box-sizing: border-box; flex-shrink: 0; background: var(--bg); }
+    #search-input { background: transparent; border: none; border-bottom: 1px solid var(--alt); color: var(--alt); font-family: inherit; font-size: 0.9em; outline: none; width: 100%; margin-bottom: 1.5em; display: none; padding: 5px 0; }
+    h1 { font-size: 1.1em; margin: 0; text-transform: lowercase; letter-spacing: 1px; }
+    .status-row { display: flex; gap: 10px; font-size: 0.6em; opacity: 0.5; margin-bottom: 2em; margin-top: 8px; }
+    #timer { color: var(--alt); cursor: pointer; border-left: 1px solid #333; padding-left: 10px; }
     ul { list-style: none; padding: 0; margin-bottom: 1.5em; }
     li { line-height: 1.8em; }
-    li.head { font-weight: bold; margin-bottom: 0.5em; }
+    li.head { font-weight: bold; margin-bottom: 0.5em; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8em; }
     a { color: inherit; text-decoration: none; }
     a:hover { color: var(--alt); }
-
     .separator { border-top: 1px solid #333; margin: 1em 0; width: 40%; }
-
     .notes-container { display: flex; flex-direction: column; margin-bottom: 1em; flex-grow: 1; }
-    .notes-header { font-weight: bold; margin-bottom: 10px; }
-    textarea {
-      flex-grow: 1;
-      background: repeating-linear-gradient(transparent, transparent 30px, #333 30px, #333 31px);
-      line-height: 31px;
-      border: none;
-      outline: none;
-      color: var(--main);
-      font-family: inherit;
-      font-size: 0.9em;
-      resize: none;
-      width: 100%;
-    }
-
+    textarea { flex-grow: 1; background: repeating-linear-gradient(transparent, transparent 30px, #333 30px, #333 31px); border: none; outline: none; color: var(--main); font-family: inherit; font-size: 0.9em; resize: none; width: 100%; line-height: 31px; }
     .cal-container { margin-top: 1em; margin-bottom: 1em; font-size: 0.6em; width: 100%; opacity: 0.6; }
-    .cal-header { font-weight: bold; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
     .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; row-gap: 8px; }
     .day-name { font-weight: bold; opacity: 0.5; margin-bottom: 4px; }
+    .today { color: var(--alt); font-weight: bold; opacity: 1; }
+
+    .bonsai-wrap { margin-top: auto; padding-top: 20px; display: flex; justify-content: center; opacity: 0.4; min-height: 60px; }
+    #bonsai { font-size: 10px; line-height: 1.2; white-space: pre; font-family: monospace; text-align: center; }
     
-    .cal-grid div:not(.day-name):not(:empty) { cursor: default; transition: color 0.2s; }
-    .cal-grid div:not(.day-name):not(:empty):hover { color: var(--alt); opacity: 1; }
-
-    .main-content {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 12%;
-    }
-
-    img { border: 2px solid var(--main); width: 12em; height: 18em; object-fit: cover; }
-    .quote { margin-top: 1em; font-size: 0.75em; opacity: 0.5; font-style: italic; }
+    .main-content { flex-grow: 1; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; padding-right: 15%; }
+    .img-wrap { width: 12em; display: flex; flex-direction: column; }
+    img { border: 1px solid rgba(255,255,255,0.2); width: 100%; height: 18em; object-fit: cover; }
+    .quote-wrap { margin-top: 1.2em; font-size: 0.7em; font-weight: bold; line-height: 1.5; opacity: 0.6; text-align: left; }
   </style>
 </head>
 <body onkeydown="handleGlobalKey(event)">
-
   <div class="sidebar">
     <input type="text" id="search-input" placeholder="searching..." onkeydown="handleSearch(event)">
-    <h1>heyy</h1>
-
+    <h1 id="greeting">...</h1>
+    <div class="status-row">
+        <div id="weather">--°C</div>
+        <div id="timer" onclick="toggleTimer()">00:00</div>
+    </div>
     <ul>
       <li class="head">General</li>
-      <li><a href="https://www.youtube.com/watch?v=nw0rszLsVz4&list=PLeobkCNVRVXx7UfXCdypcGIIfmeIiYUzp">Playlist</a></li>
+      <li><a href="https://www.youtube.com/">Playlist</a></li>
       <li><a href="https://gemini.google.com/">Gemini</a></li>
       <li><a href="https://www.instagram.com/">Instagram</a></li>
     </ul>
-
     <div class="separator"></div>
-
-    <div class="notes-container">
-      <div class="notes-header">Notes:</div>
-      <textarea spellcheck="false"></textarea>
-    </div>
-
+    <div class="notes-container"><textarea id="notes-area" spellcheck="false"></textarea></div>
     <div class="separator"></div>
-
     <div class="cal-container">
-      <div class="cal-header">January 2026</div>
-      <div class="cal-grid">
-        <div class="day-name">S</div><div class="day-name">M</div><div class="day-name">T</div>
-        <div class="day-name">W</div><div class="day-name">T</div><div class="day-name">F</div><div class="day-name">S</div>
-        <div></div><div></div><div></div><div></div><div>1</div><div>2</div><div>3</div>
-        <div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
-        <div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div>
-        <div>18</div><div>19</div><div>20</div><div>21</div><div>22</div><div>23</div><div>24</div>
-        <div>25</div><div>26</div><div>27</div><div>28</div><div>29</div><div>30</div><div>31</div>
+      <div id="cal-month" style="font-weight:bold; margin-bottom:12px; text-transform:uppercase;"></div>
+      <div class="cal-grid" id="calendar">
+        <div class="day-name">S</div><div class="day-name">M</div><div class="day-name">T</div><div class="day-name">W</div><div class="day-name">T</div><div class="day-name">F</div><div class="day-name">S</div>
       </div>
+    </div>
+    <div class="bonsai-wrap">
+      <div id="bonsai">_</div>
     </div>
   </div>
 
   <div class="main-content">
-    <div class="img-wrap">
-      <img src="https://cdn.discordapp.com/attachments/1035552915449982996/1462041438345756762/image.png?ex=696cbfb2&is=696b6e32&hm=36620409874bb1b3637717c3f1a69f094e71ef77c288c7b3e702a0b8dffaab31&">
-      <div class="quote">for they are dead<br>for they have no dreams</div>
-    </div>
+      <div class="img-wrap">
+          <img src="griffith.png" alt="Griffith">
+          <div class="quote-wrap">
+              <div>For they are dead</div>
+              <div>because they have no dreams</div>
+          </div>
+      </div>
   </div>
 
   <script>
-    const search = document.getElementById('search-input');
+    let totalSeconds = parseInt(localStorage.getItem('bonsai_life')) || 0;
+    let sessionSeconds = 0;
+    let timerInterval = null;
+    const treeStages = ["_", " | ", "\\|/", " w|w ", " (ww) \n  |  ", " (wwww)\n (wwww)\n   ||  "];
 
+    function updateBonsai() {
+        // Grows every 5 mins (300s) of total lifetime focus
+        let stage = Math.min(Math.floor(totalSeconds / 300), treeStages.length - 1);
+        document.getElementById('bonsai').innerText = treeStages[stage];
+    }
+
+    function toggleTimer() {
+        if (timerInterval) { 
+            clearInterval(timerInterval); 
+            timerInterval = null; 
+        } else { 
+            timerInterval = setInterval(() => {
+                sessionSeconds++;
+                totalSeconds++;
+                localStorage.setItem('bonsai_life', totalSeconds);
+                
+                let m = Math.floor(sessionSeconds/60).toString().padStart(2,'0');
+                let s = (sessionSeconds%60).toString().padStart(2,'0');
+                document.getElementById('timer').innerText = `${m}:${s}`;
+                updateBonsai();
+            }, 1000); 
+        }
+    }
+
+    // Dynamic Greetings
+    const hour = new Date().getHours();
+    const g = document.getElementById('greeting');
+    if (hour >= 0 && hour < 3) g.innerText = "the moon is high.";
+    else if (hour >= 3 && hour < 6) g.innerText = "rest is for the weak?";
+    else if (hour >= 6 && hour < 9) g.innerText = "wake up.";
+    else if (hour >= 9 && hour < 12) g.innerText = "get to work.";
+    else if (hour >= 12 && hour < 17) g.innerText = "staying focused.";
+    else if (hour >= 17 && hour < 21) g.innerText = "the sun is setting.";
+    else g.innerText = "still at it.";
+
+    // Initial Load
+    updateBonsai();
+    const na = document.getElementById('notes-area');
+    na.value = localStorage.getItem('sazi_notes') || "";
+    na.oninput = () => localStorage.setItem('sazi_notes', na.value);
+
+    // Calendar
+    const now = new Date();
+    document.getElementById('cal-month').innerText = `${["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][now.getMonth()]} ${now.getFullYear()}`;
+    const grid = document.getElementById('calendar');
+    const first = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+    const total = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    let html = '';
+    for (let i = 0; i < first; i++) html += '<div></div>';
+    for (let d = 1; d <= total; d++) {
+      html += `<div ${d === now.getDate() ? 'class="today"' : ''}>${d}</div>`;
+    }
+    grid.innerHTML += html;
+
+    // Weather
+    navigator.geolocation.getCurrentPosition(pos => {
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`)
+        .then(r => r.json()).then(d => {
+          document.getElementById('weather').innerText = `${Math.round(d.current_weather.temperature)}°C`;
+        });
+    });
+
+    // Keys
     function handleGlobalKey(e) {
-      if (document.activeElement.tagName === 'TEXTAREA') return;
-      
-      // Open search on any letter or number
+      if (document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT') return;
       if (e.key.length === 1 && e.key !== ' ') {
-        search.style.display = 'block';
-        search.focus();
+        const s = document.getElementById('search-input');
+        s.style.display = 'block'; s.focus();
       }
     }
 
     function handleSearch(e) {
       if (e.key === 'Enter') {
-        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(search.value)}`;
+        const v = e.target.value.toLowerCase().trim();
+        const c = { 'yt': 'https://youtube.com', 'ig': 'https://instagram.com', 'gm': 'https://gemini.google.com' };
+        window.location.href = c[v] || `https://www.google.com/search?q=${encodeURIComponent(v)}`;
       }
-      if (e.key === 'Escape') {
-        search.value = '';
-        search.style.display = 'none';
-        search.blur();
-      }
-      // Hide if empty after backspace
-      if (e.key === 'Backspace' && search.value.length <= 1) {
-         setTimeout(() => {
-           if(search.value === '') {
-             search.style.display = 'none';
-             search.blur();
-           }
-         }, 10);
-      }
+      if (e.key === 'Escape') { e.target.style.display = 'none'; e.target.value = ''; }
     }
   </script>
 </body>
