@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,15 +32,24 @@
     .notes-container { display: flex; flex-direction: column; margin-bottom: 1em; flex-grow: 1; }
     textarea { flex-grow: 1; background: repeating-linear-gradient(transparent, transparent 30px, #333 30px, #333 31px); border: none; outline: none; color: var(--main); font-family: inherit; font-size: 0.9em; resize: none; width: 100%; line-height: 31px; }
     
-    .cal-container { margin-top: 1em; margin-bottom: 0.5em; font-size: 0.6em; width: 100%; opacity: 0.6; }
+    .cal-container { margin-top: 1em; margin-bottom: 1em; font-size: 0.6em; width: 100%; opacity: 0.6; }
     .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; row-gap: 8px; }
     .day-name { font-weight: bold; opacity: 0.5; margin-bottom: 4px; }
     .today { color: var(--alt); font-weight: bold; opacity: 1; }
 
-    /* Countdown Styling - Moved Below */
-    .countdown-box { margin-top: 1em; font-size: 0.7em; letter-spacing: 1px; color: var(--alt); font-weight: bold; text-align: center; }
+    /* Final Boss Countdown Styling */
+    .exam-countdown { 
+      margin-top: 1.5em; 
+      font-size: 0.55em; 
+      letter-spacing: 2px; 
+      color: var(--alt); 
+      opacity: 0.8;
+      text-align: center;
+      border-top: 1px solid #333;
+      padding-top: 1.5em;
+    }
 
-    .bonsai-wrap { margin-top: auto; padding-top: 20px; display: flex; justify-content: center; opacity: 0.4; min-height: 60px; }
+    .bonsai-wrap { margin-top: auto; padding-top: 10px; display: flex; justify-content: center; opacity: 0.4; min-height: 60px; }
     #bonsai { font-size: 10px; line-height: 1.2; white-space: pre; font-family: monospace; text-align: center; }
     
     .main-content { flex-grow: 1; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; padding-right: 15%; }
@@ -75,7 +83,7 @@
       </div>
     </div>
 
-    <div class="countdown-box">T-MINUS: 29 DAYS</div>
+    <div class="exam-countdown" id="exam-cd">CALCULATING DEADLINE...</div>
 
     <div class="bonsai-wrap">
       <div id="bonsai">_</div>
@@ -135,6 +143,7 @@
     na.value = localStorage.getItem('sazi_notes') || "";
     na.oninput = () => localStorage.setItem('sazi_notes', na.value);
 
+    // Calendar
     const now = new Date();
     document.getElementById('cal-month').innerText = `${["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][now.getMonth()]} ${now.getFullYear()}`;
     const grid = document.getElementById('calendar');
@@ -146,6 +155,15 @@
       html += `<div ${d === now.getDate() ? 'class="today"' : ''}>${d}</div>`;
     }
     grid.innerHTML += html;
+
+    // Exam Countdown Logic
+    function updateExamCountdown() {
+      const examDate = new Date('February 17, 2026 00:00:00');
+      const diff = examDate - new Date();
+      const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+      document.getElementById('exam-cd').innerText = `[ ${days} DAYS UNTIL FEB 17 ]`;
+    }
+    updateExamCountdown();
 
     navigator.geolocation.getCurrentPosition(pos => {
       fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`)
@@ -170,10 +188,8 @@
         if (shortCodes[v]) {
           window.location.href = shortCodes[v];
         } else if (v.includes('.') && !v.includes(' ')) {
-          // If it looks like a URL (contains a dot and no spaces), go direct
           window.location.href = v.startsWith('http') ? v : `https://${v}`;
         } else {
-          // Otherwise, Google it
           window.location.href = `https://www.google.com/search?q=${encodeURIComponent(v)}`;
         }
       }
