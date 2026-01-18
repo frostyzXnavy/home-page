@@ -37,16 +37,18 @@
     .day-name { font-weight: bold; opacity: 0.5; margin-bottom: 4px; }
     .today { color: var(--alt); font-weight: bold; opacity: 1; }
 
-    /* Final Boss Countdown Styling */
+    /* Fixed Countdown Styling */
     .exam-countdown { 
-      margin-top: 1.5em; 
+      margin-top: 1em; 
       font-size: 0.55em; 
-      letter-spacing: 2px; 
+      letter-spacing: 1px; 
       color: var(--alt); 
       opacity: 0.8;
       text-align: center;
       border-top: 1px solid #333;
       padding-top: 1.5em;
+      white-space: nowrap;
+      width: 100%;
     }
 
     .bonsai-wrap { margin-top: auto; padding-top: 10px; display: flex; justify-content: center; opacity: 0.4; min-height: 60px; }
@@ -83,7 +85,7 @@
       </div>
     </div>
 
-    <div class="exam-countdown" id="exam-cd">CALCULATING DEADLINE...</div>
+    <div class="exam-countdown" id="exam-cd">CALCULATING...</div>
 
     <div class="bonsai-wrap">
       <div id="bonsai">_</div>
@@ -143,7 +145,6 @@
     na.value = localStorage.getItem('sazi_notes') || "";
     na.oninput = () => localStorage.setItem('sazi_notes', na.value);
 
-    // Calendar
     const now = new Date();
     document.getElementById('cal-month').innerText = `${["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][now.getMonth()]} ${now.getFullYear()}`;
     const grid = document.getElementById('calendar');
@@ -156,7 +157,6 @@
     }
     grid.innerHTML += html;
 
-    // Exam Countdown Logic
     function updateExamCountdown() {
       const examDate = new Date('February 17, 2026 00:00:00');
       const diff = examDate - new Date();
@@ -184,7 +184,6 @@
       if (e.key === 'Enter') {
         const v = e.target.value.toLowerCase().trim();
         const shortCodes = { 'yt': 'https://youtube.com', 'ig': 'https://instagram.com', 'gm': 'https://gemini.google.com' };
-        
         if (shortCodes[v]) {
           window.location.href = shortCodes[v];
         } else if (v.includes('.') && !v.includes(' ')) {
