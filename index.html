@@ -89,7 +89,7 @@
           <img src="griffith.png" alt="Griffith">
           <div class="quote-wrap">
               <div>For they are dead</div>
-              <div>because they have no dreams</div>
+              <div>For they have no dreams</div>
           </div>
       </div>
   </div>
@@ -98,11 +98,11 @@
     // Greetings
     const hour = new Date().getHours();
     const g = document.getElementById('greeting');
-    if (hour >= 0 && hour < 6) g.innerText = "rest is for the weak.";
-    else if (hour >= 6 && hour < 12) g.innerText = "wake up.";
-    else if (hour >= 12 && hour < 17) g.innerText = "staying focused.";
-    else if (hour >= 17 && hour < 21) g.innerText = "the sun is setting.";
-    else g.innerText = "still at it.";
+    if (hour >= 0 && hour < 6) g.innerText = "go to bed.";
+    else if (hour >= 6 && hour < 12) g.innerText = "morning.";
+    else if (hour >= 12 && hour < 17) g.innerText = "lets not slack off shall we?.";
+    else if (hour >= 17 && hour < 21) g.innerText = "how are we?.";
+    else g.innerText = "how was our day darling.";
 
     // Notes
     const na = document.getElementById('notes-area');
